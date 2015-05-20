@@ -35,5 +35,14 @@
             android:minLines="4"
             android:maxLines="8" />
 
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map"
+            android:id="@+id/map"
+            android:onClick="onMapButtonClick"
+            android:layout_gravity="right" />
+
     </LinearLayout>
 </RelativeLayout>
