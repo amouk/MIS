@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class sendHighlightedNotice extends ActionBarActivity {
 
     private EditText mEditTextEmailAddress;
+    private EditText mEditTextEmailSubject;
     private EditText mEditTextHighlightedNotice;
     private Button mButtonEmailClient;
 
@@ -27,6 +28,7 @@ public class sendHighlightedNotice extends ActionBarActivity {
         setContentView(R.layout.activity_send_highlighted_notice);
 
         mEditTextEmailAddress = (EditText)findViewById(R.id.editText_emailAddress);
+        mEditTextEmailSubject =(EditText)findViewById(R.id.editText_emailSubject);
         mEditTextHighlightedNotice = (EditText)findViewById(R.id.editText_highlightedNotice);
         mButtonEmailClient = (Button)findViewById(R.id.button_openEmailClient);
 
@@ -59,7 +61,7 @@ public class sendHighlightedNotice extends ActionBarActivity {
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mEditTextEmailAddress.getText().toString()});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Highlighted Notice eMail");
+        intent.putExtra(Intent.EXTRA_SUBJECT, mEditTextEmailSubject.getText().toString());
         intent.putExtra(Intent.EXTRA_TEXT, mEditTextHighlightedNotice.getText());
         startActivity(Intent.createChooser(intent, "Choose eMail Client:"));
     }
