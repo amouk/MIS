@@ -1,6 +1,7 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,20 +9,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private Button mButtonEmail;
-    private EditText mEditTextNotice;
+    //TODO DB
+    //DBAdapter noticeDB;
+
+    private Button mButtonCreateNotice;
+    private ListView mListViewNotices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
-        mEditTextNotice = (EditText)findViewById(R.id.edNotice);
+        mButtonCreateNotice = (Button)findViewById(R.id.button_addNotice);
+        mListViewNotices = (ListView)findViewById(R.id.listView_notices);
+
+        //TODO DB
+        //openDB();
+        //populateListViewFromDB();
     }
 
     @Override
@@ -45,21 +55,37 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+//TODO DB
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        closeDB();
+//    }
+//
+//    private void openDB() {
+//        noticeDB = new DBAdapter(this);
+//        noticeDB.open();
+//    }
+//
+//    private void closeDB() {
+//        noticeDB.close();
+//    }
+//
+//    private void populateListViewFromDB() {
+//        Cursor cursor = noticeDB.getAllRows();
+//
+//        //setup mapping from cursor to view fields
+//        String[] fromFieldNames = new String[] {DBAdapter.KEY_ROWID, DBAdapter.KEY_SUBJECT};
+//
+//        int[] toViewIDs = new int[] {R.id.textView_noticeId, R.id.textView_noticeSubject};
+//
+//        SimpleCursorAdapter myCursorAdapter;
+//        myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
+//        mListViewNotices.setAdapter(myCursorAdapter);
+//    }
 
-    public void onMapButtonClick(View view) {
-        Intent intent = new Intent(this, map.class);
+    public void onClickCreateNotice(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.createNotice.class);
         startActivity(intent);
-    }
-
-    public void onClickEmail(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
     }
 }

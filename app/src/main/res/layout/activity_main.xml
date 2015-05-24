@@ -11,46 +11,19 @@
         android:layout_height="match_parent"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Notice"
-            android:id="@+id/lbNotice" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/edNotice"
-            android:layout_weight="0.50"
-            android:editable="true"
-            android:enabled="true"
-            android:inputType="textAutoComplete|text|textMultiLine"
-            android:textIsSelectable="true"
-            android:nestedScrollingEnabled="true"
-            android:minHeight="100dp"
-            android:text="blah blah blah test notice blah"
-            android:gravity="top|left"
-            android:maxHeight="100dp"
-            android:minLines="4"
-            android:maxLines="8" />
-
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Map"
-            android:id="@+id/map"
-            android:onClick="onMapButtonClick"
-            android:layout_gravity="right" />
+            android:text="Add Notice"
+            android:id="@+id/button_addNotice"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClickCreateNotice"/>
 
-        <Button
-            android:layout_width="wrap_content"
+        <ListView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="eMail"
-            android:id="@+id/button_main_eMail"
-            android:layout_gravity="right"
-            android:onClick="onClickEmail" />
-
+            android:id="@+id/listView_notices"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </RelativeLayout>

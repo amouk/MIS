@@ -32,6 +32,7 @@ public class sendHighlightedNotice extends ActionBarActivity {
         mEditTextHighlightedNotice = (EditText)findViewById(R.id.editText_highlightedNotice);
         mButtonEmailClient = (Button)findViewById(R.id.button_openEmailClient);
 
+        mEditTextEmailSubject.setText(getIntent().getStringExtra("subject"));
         mEditTextHighlightedNotice.setText(createHighlightedNotice(getIntent().getStringExtra("notice")));
     }
 
