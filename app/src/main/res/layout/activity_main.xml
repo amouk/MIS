@@ -44,5 +44,13 @@
             android:onClick="onMapButtonClick"
             android:layout_gravity="right" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="eMail"
+            android:id="@+id/button_main_eMail"
+            android:layout_gravity="right"
+            android:onClick="onClickEmail" />
+
     </LinearLayout>
 </RelativeLayout>

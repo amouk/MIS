@@ -6,14 +6,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private Button mButtonEmail;
+    private EditText mEditTextNotice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mEditTextNotice = (EditText)findViewById(R.id.edNotice);
     }
 
     @Override
@@ -41,5 +49,17 @@ public class MainActivity extends ActionBarActivity {
     public void onMapButtonClick(View view) {
         Intent intent = new Intent(this, map.class);
         startActivity(intent);
+    }
+
+    public void onClickEmail(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
+        mButtonEmail.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
+                                                startActivity(intent);
+                                            }
+                                        }
+        );
     }
 }
