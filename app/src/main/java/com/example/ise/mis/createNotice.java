@@ -1,6 +1,5 @@
 package com.example.ise.mis;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import com.example.ise.mis.DBAdapter;
 
 /**
  * Created by twernicke on 5/24/2015.
@@ -85,7 +83,7 @@ public class createNotice extends ActionBarActivity {
     }
 
     public void onMapButtonClick(View view) {
-        Intent intent = new Intent(this, map.class);
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 
