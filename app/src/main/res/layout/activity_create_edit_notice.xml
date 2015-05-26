@@ -70,5 +70,12 @@
             android:layout_gravity="right"
             android:onClick="onClickEmail" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tag"
+            android:id="@+id/button_tag"
+            android:layout_gravity="right" />
+
     </LinearLayout>
 </RelativeLayout>

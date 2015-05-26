@@ -12,7 +12,7 @@ public class DBAdapter {
     private static final String TAG = "DBAdapter"; //used for logging database version changes
 
     // Field Names:
-    public static final String KEY_ROWID = "id";
+    public static final String KEY_ROWID = "_id";
     public static final String KEY_SUBJECT = "subject";
     public static final String KEY_NOTICE = "notice";
 
@@ -25,7 +25,7 @@ public class DBAdapter {
 
     // DataBase info:
     public static final String DATABASE_NAME = "dbNotice";
-    public static final String DATABASE_TABLE = "mainNotice";
+    public static final String DATABASE_TABLE = "TableNotice";
     public static final int DATABASE_VERSION = 2; // The version number must be incremented each time a change to DB structure occurs.
 
     //SQL statement to create database

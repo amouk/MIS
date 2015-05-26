@@ -12,7 +12,7 @@ import android.widget.EditText;
 /**
  * Created by twernicke on 5/24/2015.
  */
-public class createNotice extends ActionBarActivity {
+public class editNotice extends ActionBarActivity {
 
     DBAdapter noticeDB;
 
@@ -30,6 +30,8 @@ public class createNotice extends ActionBarActivity {
         mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
 
         openDB();
+
+        //TODO set subject and notice from db
     }
 
     @Override
@@ -54,6 +56,7 @@ public class createNotice extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -72,10 +75,11 @@ public class createNotice extends ActionBarActivity {
 
     public void onClickSaveNotice(View view) {
 
+        //TODO update row instead of insert
         noticeDB.insertRow(mEditTextNoticeSubject.getText().toString(),
                             mEditTextNotice.getText().toString());
 
-        Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -85,7 +89,7 @@ public class createNotice extends ActionBarActivity {
     }
 
     public void onClickEmail(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
+        final Intent intent = new Intent(this, sendHighlightedNotice.class);
         mButtonEmail.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
