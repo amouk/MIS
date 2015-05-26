@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 
 /**
@@ -18,7 +19,7 @@ public class createNotice extends ActionBarActivity {
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
-    private Button mButtonEmail;
+    private ImageButton mButtonEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class createNotice extends ActionBarActivity {
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
 
         openDB();
     }
