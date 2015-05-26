@@ -14,6 +14,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_addTag" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/button_addTag"
+        android:onClick="onClickAddTag"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

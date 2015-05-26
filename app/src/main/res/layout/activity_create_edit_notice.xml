@@ -75,7 +75,8 @@
             android:layout_height="wrap_content"
             android:text="Tag"
             android:id="@+id/button_tag"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:onClick="onClickTag" />
 
     </LinearLayout>
 </RelativeLayout>
