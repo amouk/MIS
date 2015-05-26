@@ -34,14 +34,7 @@ public class MainActivity extends ActionBarActivity {
         openDB();
         populateListViewFromDB();
 
-        //public void onListViewNoticeClick() {
-        mListViewNotices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long idInDB) {
-                Log.w("--- onItemClick ---: ","DB id: " + String.valueOf(idInDB));
-            }
-        });
-        //}
+        onListViewNoticeClick();
     }
 
     @Override
@@ -92,6 +85,18 @@ public class MainActivity extends ActionBarActivity {
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
         mListViewNotices.setAdapter(myCursorAdapter);
+    }
+
+    public void onListViewNoticeClick() {
+        final Intent intent = new Intent(this, com.example.ise.mis.editNotice.class);
+        mListViewNotices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long idInDB) {
+                Log.w("--- onItemClick ---: ","DB id: " + String.valueOf(idInDB));
+                intent.putExtra("id", String.valueOf(idInDB));
+                startActivity(intent);
+            }
+        });
     }
 
     public void onClickCreateNotice(View view) {

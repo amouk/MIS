@@ -20,8 +20,8 @@ public class DBAdapter {
 
     // Column Numbers for each Field Name:
     public static final int COL_ROWID = 0;
-    public static final int COL_TASK = 1;
-    public static final int COL_DATE = 2;
+    public static final int COL_SUBJECT = 1;
+    public static final int COL_NOTICE = 2;
 
     // DataBase info:
     public static final String DATABASE_NAME = "dbNotice";

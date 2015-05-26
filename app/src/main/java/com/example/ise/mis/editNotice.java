@@ -1,6 +1,7 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -31,7 +32,7 @@ public class editNotice extends ActionBarActivity {
 
         openDB();
 
-        //TODO set subject and notice from db
+        setSubjectAndNotice();
     }
 
     @Override
@@ -72,12 +73,17 @@ public class editNotice extends ActionBarActivity {
         noticeDB.close();
     }
 
-
+    private void setSubjectAndNotice() {
+        Cursor c = noticeDB.getRow(Long.parseLong(getIntent().getStringExtra("id")));
+        mEditTextNoticeSubject.setText(c.getString(noticeDB.COL_SUBJECT));
+        mEditTextNotice.setText(c.getString(noticeDB.COL_NOTICE));
+    }
     public void onClickSaveNotice(View view) {
 
         //TODO update row instead of insert
-        noticeDB.insertRow(mEditTextNoticeSubject.getText().toString(),
-                            mEditTextNotice.getText().toString());
+        noticeDB.updateRow(Long.parseLong(getIntent().getStringExtra("id")),
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
