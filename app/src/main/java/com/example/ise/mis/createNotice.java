@@ -72,7 +72,7 @@ public class createNotice extends ActionBarActivity {
 
     public void onClickSaveNotice(View view) {
 
-        noticeDB.insertRow(mEditTextNoticeSubject.getText().toString(),
+        noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
                             mEditTextNotice.getText().toString());
 
         Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
