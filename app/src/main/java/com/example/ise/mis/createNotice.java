@@ -1,24 +1,32 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 /**
  * Created by twernicke on 5/24/2015.
  */
-public class createNotice extends ActionBarActivity {
+public class createNotice extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     DBAdapter noticeDB;
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
     private Button mButtonEmail;
+    private GoogleApiClient mGoogleApiClient;
+    public static final String TAG = createNotice.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,8 @@ public class createNotice extends ActionBarActivity {
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
         mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
 
+        buildGoogleApiClient();
+        Log.i(TAG, "in onCreate of createNotice");
         openDB();
     }
 
@@ -57,6 +67,9 @@ public class createNotice extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         closeDB();
     }
 
@@ -67,6 +80,32 @@ public class createNotice extends ActionBarActivity {
 
     private void closeDB() {
         noticeDB.close();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "Location services connected.");
+
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            Log.i(TAG, "current latitude: " + String.valueOf(mLastLocation.getLatitude()));
+            Log.i(TAG, "current longitude: " + String.valueOf(mLastLocation.getLongitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Location services suspended. Please reconnect.");
     }
 
 
@@ -95,5 +134,10 @@ public class createNotice extends ActionBarActivity {
                                             }
                                         }
         );
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }
