@@ -75,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void populateListViewFromDB() {
-        Cursor cursor = noticeDB.getAllRows();
+        Cursor cursor = noticeDB.getAllRowsNotice();
 
         //setup mapping from cursor to view fields
         String[] fromFieldNames = new String[] {DBAdapter.KEY_ROWID, DBAdapter.KEY_SUBJECT};

@@ -74,14 +74,14 @@ public class editNotice extends ActionBarActivity {
     }
 
     private void setSubjectAndNotice() {
-        Cursor c = noticeDB.getRow(Long.parseLong(getIntent().getStringExtra("id")));
+        Cursor c = noticeDB.getRowNotice(Long.parseLong(getIntent().getStringExtra("id")));
         mEditTextNoticeSubject.setText(c.getString(noticeDB.COL_SUBJECT));
         mEditTextNotice.setText(c.getString(noticeDB.COL_NOTICE));
     }
     public void onClickSaveNotice(View view) {
 
         //TODO update row instead of insert
-        noticeDB.updateRow(Long.parseLong(getIntent().getStringExtra("id")),
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
                 mEditTextNoticeSubject.getText().toString(),
                 mEditTextNotice.getText().toString());
 
@@ -106,4 +106,19 @@ public class editNotice extends ActionBarActivity {
                                         }
         );
     }
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+        mButtonEmail.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
+                                                        mEditTextNoticeSubject.getText().toString(),
+                                                        mEditTextNotice.getText().toString());
+                                                intent.putExtra("id", getIntent().getStringExtra("id"));
+                                                startActivity(intent);
+                                            }
+                                        }
+        );
+    }
+
 }

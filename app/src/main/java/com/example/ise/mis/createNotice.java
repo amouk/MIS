@@ -71,8 +71,7 @@ public class createNotice extends ActionBarActivity {
 
 
     public void onClickSaveNotice(View view) {
-
-        noticeDB.insertRow(mEditTextNoticeSubject.getText().toString(),
+        noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
                             mEditTextNotice.getText().toString());
 
         Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
@@ -91,6 +90,23 @@ public class createNotice extends ActionBarActivity {
                                             public void onClick(View v) {
                                                 intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
                                                 intent.putExtra("notice", mEditTextNotice.getText().toString());
+                                                startActivity(intent);
+                                            }
+                                        }
+        );
+    }
+
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+        mButtonEmail.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                //TODO save notice and send id to tag
+                                                intent.putExtra("id", String.valueOf(noticeDB.insertRowNotice(
+                                                                                            mEditTextNoticeSubject.getText().toString(),
+                                                                                            mEditTextNotice.getText().toString())));
+                                                //intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
+                                                //intent.putExtra("notice", mEditTextNotice.getText().toString());
                                                 startActivity(intent);
                                             }
                                         }
