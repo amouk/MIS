@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +31,8 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
     private double longitude = -5.35325220;
     private double latitude = 36.14491060;
     public static final String TAG = createNotice.class.getSimpleName();
+    private ImageButton mButtonEmail;
+    private ImageButton mButtonTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,8 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
+        mButtonTag = (ImageButton)findViewById(R.id.button_tag);
 
         buildGoogleApiClient();
         Log.i(TAG, "in onCreate of createNotice");
@@ -65,6 +69,13 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+
+        startActivity(intent);
     }
 
     @Override
@@ -140,14 +151,23 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
 
     public void onClickEmail(View view) {
         final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
+
+        intent.putExtra("id", String.valueOf(noticeDB.insertRowNotice(
+                        mEditTextNoticeSubject.getText().toString(),
+                        mEditTextNotice.getText().toString())));
+        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
+        intent.putExtra("notice", mEditTextNotice.getText().toString());
+
+        startActivity(intent);
+    }
+
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+
+        intent.putExtra("id", noticeDB.insertRowNotice(
+                        mEditTextNoticeSubject.getText().toString(),
+                        mEditTextNotice.getText().toString()));
+
+        startActivity(intent);
     }
 }

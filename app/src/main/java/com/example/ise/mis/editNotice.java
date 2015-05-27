@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,6 +26,8 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
+    private ImageButton mButtonEmail;
+    private ImageButton mButtonTag;
     private Button mButtonEmail;
     private GoogleApiClient mGoogleApiClient;
     private double longitude = 6.65550220;
@@ -38,7 +41,8 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
+        mButtonTag = (ImageButton)findViewById(R.id.button_tag);
 
         buildGoogleApiClient();
         Log.i(TAG, "in onCreate of editNotice");
@@ -78,6 +82,12 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+
+        startActivity(intent);
+    }
 
     @Override
     protected void onDestroy() {
@@ -99,9 +109,9 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
         mEditTextNoticeSubject.setText(c.getString(noticeDB.COL_SUBJECT));
         mEditTextNotice.setText(c.getString(noticeDB.COL_NOTICE));
     }
+
     public void onClickSaveNotice(View view) {
 
-        //TODO update row instead of insert
         noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
                 mEditTextNoticeSubject.getText().toString(),
                 mEditTextNotice.getText().toString());
@@ -122,31 +132,27 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
 
     public void onClickEmail(View view) {
         final Intent intent = new Intent(this, sendHighlightedNotice.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
-    }
-    public void onClickTag(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
-                                                        mEditTextNoticeSubject.getText().toString(),
-                                                        mEditTextNotice.getText().toString());
-                                                intent.putExtra("id", getIntent().getStringExtra("id"));
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
+
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        intent.putExtra("id", getIntent().getStringExtra("id"));
+        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
+        intent.putExtra("notice", mEditTextNotice.getText().toString());
+
+        startActivity(intent);
     }
 
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        intent.putExtra("id", getIntent().getStringExtra("id"));
+
+        startActivity(intent);
+    }
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Location services connected.");
