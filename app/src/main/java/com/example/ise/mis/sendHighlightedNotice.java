@@ -58,12 +58,23 @@ public class sendHighlightedNotice extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, com.example.ise.mis.editNotice.class);
+
+        intent.putExtra("id", getIntent().getStringExtra("id"));
+
+        startActivity(intent);
+    }
+
     public void onClickEmailClient(View view) {
         final Intent intent = new Intent(Intent.ACTION_SEND);
+
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mEditTextEmailAddress.getText().toString()});
         intent.putExtra(Intent.EXTRA_SUBJECT, mEditTextEmailSubject.getText().toString());
         intent.putExtra(Intent.EXTRA_TEXT, mEditTextHighlightedNotice.getText());
+
         startActivity(Intent.createChooser(intent, "Choose eMail Client:"));
     }
 

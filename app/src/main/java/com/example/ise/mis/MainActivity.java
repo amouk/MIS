@@ -1,5 +1,7 @@
 package com.example.ise.mis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
@@ -57,6 +59,29 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Leave Application?");
+        alertDialog.setMessage("Are you sure you want to leave the application?");
+        alertDialog.setIcon(R.drawable.powered_by_google_light);
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        //finish();
+                        //finishAndRemoveTask();
+                        moveTaskToBack(true);
+                    }
+                });
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+        });
+        alertDialog.show();
     }
 
     @Override

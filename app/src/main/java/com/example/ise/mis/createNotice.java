@@ -19,7 +19,8 @@ public class createNotice extends ActionBarActivity {
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
-    private ImageButton mButtonEmail;
+    private Button mButtonEmail;
+    private Button mButtonTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,8 @@ public class createNotice extends ActionBarActivity {
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
+        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mButtonTag = (Button)findViewById(R.id.button_tag);
 
         openDB();
     }
@@ -56,6 +58,13 @@ public class createNotice extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+
+        startActivity(intent);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         closeDB();
@@ -69,7 +78,6 @@ public class createNotice extends ActionBarActivity {
     private void closeDB() {
         noticeDB.close();
     }
-
 
     public void onClickSaveNotice(View view) {
 
@@ -87,14 +95,23 @@ public class createNotice extends ActionBarActivity {
 
     public void onClickEmail(View view) {
         final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
+
+        intent.putExtra("id", String.valueOf(noticeDB.insertRowNotice(
+                        mEditTextNoticeSubject.getText().toString(),
+                        mEditTextNotice.getText().toString())));
+        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
+        intent.putExtra("notice", mEditTextNotice.getText().toString());
+
+        startActivity(intent);
+    }
+
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+
+        intent.putExtra("id", noticeDB.insertRowNotice(
+                        mEditTextNoticeSubject.getText().toString(),
+                        mEditTextNotice.getText().toString()));
+
+        startActivity(intent);
     }
 }

@@ -20,7 +20,8 @@ public class editNotice extends ActionBarActivity {
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
-    private ImageButton mButtonEmail;
+    private Button mButtonEmail;
+    private Button mButtonTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,8 @@ public class editNotice extends ActionBarActivity {
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
+        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
+        mButtonTag = (Button)findViewById(R.id.button_tag);
 
         openDB();
 
@@ -58,6 +60,12 @@ public class editNotice extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+
+        startActivity(intent);
+    }
 
     @Override
     protected void onDestroy() {
@@ -82,7 +90,6 @@ public class editNotice extends ActionBarActivity {
 
     public void onClickSaveNotice(View view) {
 
-        //TODO update row instead of insert
         noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
                 mEditTextNoticeSubject.getText().toString(),
                 mEditTextNotice.getText().toString());
@@ -98,29 +105,25 @@ public class editNotice extends ActionBarActivity {
 
     public void onClickEmail(View view) {
         final Intent intent = new Intent(this, sendHighlightedNotice.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-                                                intent.putExtra("notice", mEditTextNotice.getText().toString());
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
-    }
-    public void onClickTag(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
-                                                        mEditTextNoticeSubject.getText().toString(),
-                                                        mEditTextNotice.getText().toString());
-                                                intent.putExtra("id", getIntent().getStringExtra("id"));
-                                                startActivity(intent);
-                                            }
-                                        }
-        );
+
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        intent.putExtra("id", getIntent().getStringExtra("id"));
+        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
+        intent.putExtra("notice", mEditTextNotice.getText().toString());
+
+        startActivity(intent);
     }
 
+    public void onClickTag(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
+
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        intent.putExtra("id", getIntent().getStringExtra("id"));
+
+        startActivity(intent);
+    }
 }
