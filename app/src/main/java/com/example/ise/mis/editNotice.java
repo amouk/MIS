@@ -20,8 +20,8 @@ public class editNotice extends ActionBarActivity {
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
-    private Button mButtonEmail;
-    private Button mButtonTag;
+    private ImageButton mButtonEmail;
+    private ImageButton mButtonTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class editNotice extends ActionBarActivity {
 
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
-        mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
-        mButtonTag = (Button)findViewById(R.id.button_tag);
+        mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
+        mButtonTag = (ImageButton)findViewById(R.id.button_tag);
 
         openDB();
 

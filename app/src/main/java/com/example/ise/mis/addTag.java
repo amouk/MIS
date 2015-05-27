@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -22,7 +23,7 @@ public class addTag extends ActionBarActivity {
     DBAdapter noticeDB;
 
     private EditText mEditTextAddTag;
-    private Button mButtonAddTag;
+    private ImageButton mButtonAddTag;
     private ListView mListViewTags;
 
     @Override
@@ -31,7 +32,7 @@ public class addTag extends ActionBarActivity {
         setContentView(R.layout.activity_add_tag);
 
         mEditTextAddTag = (EditText)findViewById(R.id.editText_addTag);
-        mButtonAddTag = (Button)findViewById(R.id.button_addTag);
+        mButtonAddTag = (ImageButton)findViewById(R.id.button_addTag);
         mListViewTags = (ListView)findViewById(R.id.listView_tagList);
 
         openDB();
