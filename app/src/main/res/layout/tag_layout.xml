@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:padding="2dp"
-        android:background="@drawable/rectangle_listitem">
+        android:background="@drawable/shape_listitem">
 
         <TextView
             android:layout_width="wrap_content"
