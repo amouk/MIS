@@ -64,7 +64,7 @@ public class DBAdapter {
             "CREATE TABLE " + DATABASE_TABLE_LOCATION
                     + " (" + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + KEY_NOTICEID + " INTEGER NOT NULL, "
-                    + KEY_LATITUDE + " DOUBLE"
+                    + KEY_LATITUDE + " DOUBLE, "
                     + KEY_LONGITUDE + " DOUBLE"
                     + ");";
 

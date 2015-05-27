@@ -2,24 +2,34 @@ package com.example.ise.mis;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 /**
  * Created by twernicke on 5/24/2015.
  */
-public class editNotice extends ActionBarActivity {
+public class editNotice extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     DBAdapter noticeDB;
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
     private Button mButtonEmail;
+    private GoogleApiClient mGoogleApiClient;
+    private double longitude = 6.65550220;
+    private double latitude = 50.94519450;
+    public static final String TAG = createNotice.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +40,20 @@ public class editNotice extends ActionBarActivity {
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
         mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
 
+        buildGoogleApiClient();
+        Log.i(TAG, "in onCreate of editNotice");
         openDB();
 
         setSubjectAndNotice();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -91,6 +112,11 @@ public class editNotice extends ActionBarActivity {
 
     public void onMapButtonClick(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
+        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")), mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        noticeDB.insertRowLocation(Long.parseLong(getIntent().getStringExtra("id")), latitude, longitude);
+        intent.putExtra("noticeID", getIntent().getStringExtra("id"));
+        Log.i(TAG, "NOTICEID: " + getIntent().getStringExtra("id"));
         startActivity(intent);
     }
 
@@ -121,4 +147,27 @@ public class editNotice extends ActionBarActivity {
         );
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "Location services connected.");
+
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        //if (mLastLocation != null) {
+        //Log.i(TAG, "current latitude: " + String.valueOf(mLastLocation.getLatitude()));
+        //Log.i(TAG, "current longitude: " + String.valueOf(mLastLocation.getLongitude()));
+        //noticeDB.insertRowLocation(noticeID, mLastLocation.getLatitude(), String.valueOf(mLastLocation.getLongitude());
+        //noticeDB.insertRowLocation(noticeID, 36.14491060, -5.35325220);
+        //}
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Location services suspended. Please reconnect.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
 }

@@ -1,24 +1,35 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 /**
  * Created by twernicke on 5/24/2015.
  */
-public class createNotice extends ActionBarActivity {
+public class createNotice extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     DBAdapter noticeDB;
 
     private EditText mEditTextNoticeSubject;
     private EditText mEditTextNotice;
     private Button mButtonEmail;
+    private GoogleApiClient mGoogleApiClient;
+    private long noticeID;
+    private double longitude = -5.35325220;
+    private double latitude = 36.14491060;
+    public static final String TAG = createNotice.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +40,8 @@ public class createNotice extends ActionBarActivity {
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
         mButtonEmail = (Button)findViewById(R.id.button_main_eMail);
 
+        buildGoogleApiClient();
+        Log.i(TAG, "in onCreate of createNotice");
         openDB();
     }
 
@@ -57,7 +70,38 @@ public class createNotice extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         closeDB();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+        }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "Location services connected.");
+
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        mGoogleApiClient);
+        //if (mLastLocation != null) {
+            //Log.i(TAG, "current latitude: " + String.valueOf(mLastLocation.getLatitude()));
+            //Log.i(TAG, "current longitude: " + String.valueOf(mLastLocation.getLongitude()));
+            //noticeDB.insertRowLocation(noticeID, mLastLocation.getLatitude(), String.valueOf(mLastLocation.getLongitude());
+            //noticeDB.insertRowLocation(noticeID, 36.14491060, -5.35325220);
+        //}
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Location services suspended. Please reconnect.");
     }
 
     private void openDB() {
@@ -69,10 +113,15 @@ public class createNotice extends ActionBarActivity {
         noticeDB.close();
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
 
     public void onClickSaveNotice(View view) {
 
-        noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
+        noticeID = noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
                             mEditTextNotice.getText().toString());
 
         Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
@@ -81,6 +130,11 @@ public class createNotice extends ActionBarActivity {
 
     public void onMapButtonClick(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
+        noticeID = noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString());
+        noticeDB.insertRowLocation(noticeID, latitude, longitude);
+        intent.putExtra("noticeID", String.valueOf(noticeID));
+        Log.i(TAG,"NOTICEID: " + noticeID);
         startActivity(intent);
     }
 
