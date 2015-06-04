@@ -120,6 +120,21 @@ public class DBAdapter {
         return db.insert(DATABASE_TABLE_LOCATION, null, initialValues);
     }
 
+    // Add a new set of values to be inserted into the Tag database.
+    public long insertRowUniqueTag(long noticeID, String tag) {
+
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_NOTICEID, noticeID);
+        initialValues.put(KEY_TAG, tag);
+
+        if(!existsNoticeIdAndTag(noticeID, tag)) {
+            // Insert the data into the database.
+            return db.insert(DATABASE_TABLE_TAG, null, initialValues);
+        } else {
+            return -1;
+        }
+    }
+
     // Delete a row from the database, by rowId (primary key)
     public boolean deleteRowNotice(long rowId) {
         String where = KEY_ROWID + "=" + rowId;
@@ -209,6 +224,20 @@ public class DBAdapter {
             c.moveToFirst();
         }
         return c;
+    }
+
+    // Return all data in the Tag database of a noticeId and Tag.
+    public boolean existsNoticeIdAndTag(long noticeId, String tag) {
+        String where = KEY_NOTICEID + "=" + noticeId + " AND " + KEY_TAG + " LIKE '" + tag + "'";
+        Log.d("existsNoticeIdAndTag()", where);
+        Cursor c = 	db.query(true, DATABASE_TABLE_TAG, ALL_KEYS_TAGS, where, null, null, null, null, null);
+        if (c.getCount() != 0) {
+            c.close();
+            return true;
+        } else {
+            c.close();
+            return false;
+        }
     }
 
     // Return all data in the location database of a noticeId.

@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-
 public class MainActivity extends ActionBarActivity {
 
     DBAdapter noticeDB;

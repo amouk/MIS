@@ -36,9 +36,8 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="177dp"
             android:id="@+id/edNotice"
-            android:layout_weight="0.50"
             android:editable="true"
             android:enabled="true"
             android:inputType="textAutoComplete|text|textMultiLine"
@@ -76,17 +75,47 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_mail"
                 android:id="@+id/button_main_eMail"
-                android:layout_gravity="end"
                 android:onClick="onClickEmail" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_tags"
-                android:id="@+id/button_tag"
-                android:layout_gravity="end"
-                android:onClick="onClickTag" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Tag:"
+            android:id="@+id/textView_addTag" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <EditText
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_addTag" />
+
+            <ImageButton
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:id="@+id/button_addTag"
+                android:src="@drawable/ic_action_add"
+                android:onClick="onClickAddTag" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tags:"
+            android:id="@+id/textView_tags" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView_tags"
+            android:headerDividersEnabled="false" />
 
     </LinearLayout>
 

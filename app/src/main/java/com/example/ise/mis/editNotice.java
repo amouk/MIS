@@ -12,23 +12,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-/**
- * Created by twernicke on 5/24/2015.
- */
+import java.util.ArrayList;
+
 public class editNotice extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     DBAdapter noticeDB;
+    private Cursor mCursor;
 
+    private TextView mTextViewNoticeSubject;
     private EditText mEditTextNoticeSubject;
+    private TextView mTextViewNotice;
     private EditText mEditTextNotice;
     private ImageButton mButtonEmail;
-    private ImageButton mButtonTag;
-    private Button mButtonEmail;
+
+    private TextView mTextViewAddTag;
+    private EditText mEditTextAddTag;
+    private ImageButton mButtonAddTag;
+    private TextView mTextViewTags;
+    private ListView mListViewTags;
+
     private GoogleApiClient mGoogleApiClient;
     private double longitude = 6.65550220;
     private double latitude = 50.94519450;
@@ -39,16 +50,27 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_notice);
 
+        mTextViewNoticeSubject = (TextView)findViewById(R.id.textView_noticeSubject);
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
+        mTextViewNotice = (TextView)findViewById(R.id.lbNotice);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
         mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
-        mButtonTag = (ImageButton)findViewById(R.id.button_tag);
+        mTextViewAddTag = (TextView)findViewById(R.id.textView_addTag);
+        mEditTextAddTag = (EditText)findViewById(R.id.editText_addTag);
+        mButtonAddTag = (ImageButton)findViewById(R.id.button_addTag);
+        mTextViewTags = (TextView)findViewById(R.id.textView_tags);
+        mListViewTags = (ListView)findViewById(R.id.listView_tags);
+
+        mTextViewNoticeSubject.setText("Edit Notice Subject:");
+        mTextViewNotice.setText("Edit Notice:");
 
         buildGoogleApiClient();
         Log.i(TAG, "in onCreate of editNotice");
+
         openDB();
 
         setSubjectAndNotice();
+        populateListViewFromDB();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -83,6 +105,13 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        mEditTextAddTag.setText("");
+        populateListViewFromDB();
+    }
+
+    @Override
     public void onBackPressed() {
         final Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
 
@@ -93,6 +122,7 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
     protected void onDestroy() {
         super.onDestroy();
         closeDB();
+        mCursor.close();
     }
 
     private void openDB() {
@@ -110,14 +140,28 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
         mEditTextNotice.setText(c.getString(noticeDB.COL_NOTICE));
     }
 
+    private void populateListViewFromDB() {
+        mCursor = noticeDB.getAllNoticeIdRowsTag(Long.parseLong(getIntent().getStringExtra("id")));
+
+        //setup mapping from cursor to view fields
+        String[] fromFieldNames = new String[] {DBAdapter.KEY_TAG};
+
+        int[] toViewIDs = new int[] {R.id.textView_tag};
+
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.tag_layout, mCursor, fromFieldNames, toViewIDs, 0);
+        mListViewTags.setAdapter(myCursorAdapter);
+    }
+
     public void onClickSaveNotice(View view) {
 
         noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
                 mEditTextNoticeSubject.getText().toString(),
                 mEditTextNotice.getText().toString());
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Toast.makeText(getBaseContext(), "Notice updated..", Toast.LENGTH_SHORT).show();
+
+        onRestart();
     }
 
     public void onMapButtonClick(View view) {
@@ -131,28 +175,30 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
     }
 
     public void onClickEmail(View view) {
-        final Intent intent = new Intent(this, sendHighlightedNotice.class);
+        final Intent intent = new Intent(Intent.ACTION_SEND);
 
         noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
                 mEditTextNoticeSubject.getText().toString(),
                 mEditTextNotice.getText().toString());
-        intent.putExtra("id", getIntent().getStringExtra("id"));
-        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-        intent.putExtra("notice", mEditTextNotice.getText().toString());
 
-        startActivity(intent);
+        Toast.makeText(getBaseContext(), "Notice saved..", Toast.LENGTH_SHORT).show();
+
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_SUBJECT, mEditTextNoticeSubject.getText().toString());
+        intent.putExtra(Intent.EXTRA_TEXT, createHighlightedNotice(mEditTextNotice.getText().toString()));
+
+        startActivity(Intent.createChooser(intent, "Choose eMail Client:"));
     }
 
-    public void onClickTag(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
-
-        noticeDB.updateRowNotice(Long.parseLong(getIntent().getStringExtra("id")),
-                mEditTextNoticeSubject.getText().toString(),
-                mEditTextNotice.getText().toString());
-        intent.putExtra("id", getIntent().getStringExtra("id"));
-
-        startActivity(intent);
+    public void onClickAddTag(View view) {
+        if(noticeDB.insertRowUniqueTag(Long.parseLong(getIntent().getStringExtra("id")), mEditTextAddTag.getText().toString()) >= 0) {
+            Toast.makeText(getBaseContext(), "Tag added..", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getBaseContext(), "Tag already exists..", Toast.LENGTH_SHORT).show();
+        }
+        onRestart();
     }
+
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Location services connected.");
@@ -175,5 +221,26 @@ public class editNotice extends ActionBarActivity implements GoogleApiClient.Con
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    private String createHighlightedNotice(String notice) {
+        String highlightedNotice = new String();
+
+        int startEnd = 0;
+        char[] parseSymbols = {'<', '>'};
+        ArrayList<Integer> indexStartEndSymbol = new ArrayList<Integer>();
+
+        for(int i=0; i<notice.length(); i++) {
+            if(notice.charAt(i) == parseSymbols[startEnd]) {
+                indexStartEndSymbol.add((Integer)i);
+                startEnd = 1 - startEnd;
+            }
+        }
+
+        for(int i=0; i<indexStartEndSymbol.size()-1; i=i+2) {
+            highlightedNotice += notice.substring((int)indexStartEndSymbol.get(i)+1, (int)indexStartEndSymbol.get(i+1)) + "\n";
+        }
+
+        return highlightedNotice;
     }
 }

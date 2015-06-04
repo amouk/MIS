@@ -1,6 +1,7 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,38 +12,63 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-/**
- * Created by twernicke on 5/24/2015.
- */
 public class createNotice extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     DBAdapter noticeDB;
 
+    private TextView mTextViewNoticeSubject;
     private EditText mEditTextNoticeSubject;
+    private TextView mTextViewNotice;
     private EditText mEditTextNotice;
-    private Button mButtonEmail;
+
+    private ImageButton mButtonEmail;
+
+    private TextView mTextViewAddTag;
+    private EditText mEditTextAddTag;
+    private ImageButton mButtonAddTag;
+    private TextView mTextViewTags;
+    private ListView mListViewTags;
+
     private GoogleApiClient mGoogleApiClient;
     private long noticeID;
     private double longitude = -5.35325220;
     private double latitude = 36.14491060;
     public static final String TAG = createNotice.class.getSimpleName();
-    private ImageButton mButtonEmail;
-    private ImageButton mButtonTag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_notice);
 
+        mTextViewNoticeSubject = (TextView)findViewById(R.id.textView_noticeSubject);
         mEditTextNoticeSubject = (EditText)findViewById(R.id.editText_noticeSubject);
+        mTextViewNotice = (TextView)findViewById(R.id.lbNotice);
         mEditTextNotice = (EditText)findViewById(R.id.edNotice);
         mButtonEmail = (ImageButton)findViewById(R.id.button_main_eMail);
-        mButtonTag = (ImageButton)findViewById(R.id.button_tag);
+        mTextViewAddTag = (TextView)findViewById(R.id.textView_addTag);
+        mEditTextAddTag = (EditText)findViewById(R.id.editText_addTag);
+        mButtonAddTag = (ImageButton)findViewById(R.id.button_addTag);
+        mTextViewTags = (TextView)findViewById(R.id.textView_tags);
+        mListViewTags = (ListView)findViewById(R.id.listView_tags);
+
+        mTextViewNoticeSubject.setText("Create Notice Subject:");
+        mTextViewNotice.setText("Create Notice:");
+
+        mButtonEmail.setVisibility(View.INVISIBLE);
+        mTextViewAddTag.setVisibility(View.INVISIBLE);
+        mEditTextAddTag.setVisibility(View.INVISIBLE);
+        mButtonAddTag.setVisibility(View.INVISIBLE);
+        mTextViewTags.setVisibility(View.INVISIBLE);
+        mListViewTags.setVisibility(View.INVISIBLE);
 
         buildGoogleApiClient();
         Log.i(TAG, "in onCreate of createNotice");
@@ -131,11 +157,14 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
 
 
     public void onClickSaveNotice(View view) {
+        final Intent intent = new Intent(this, com.example.ise.mis.editNotice.class);
 
-        noticeID = noticeDB.insertRowNotice(mEditTextNoticeSubject.getText().toString(),
-                            mEditTextNotice.getText().toString());
+        intent.putExtra("id", String.valueOf(noticeDB.insertRowNotice(
+                mEditTextNoticeSubject.getText().toString(),
+                mEditTextNotice.getText().toString())));
 
-        Intent intent = new Intent(this, com.example.ise.mis.MainActivity.class);
+        Toast.makeText(getBaseContext(), "Notice created..", Toast.LENGTH_SHORT).show();
+
         startActivity(intent);
     }
 
@@ -146,28 +175,6 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
         noticeDB.insertRowLocation(noticeID, latitude, longitude);
         intent.putExtra("noticeID", String.valueOf(noticeID));
         Log.i(TAG,"NOTICEID: " + noticeID);
-        startActivity(intent);
-    }
-
-    public void onClickEmail(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.sendHighlightedNotice.class);
-
-        intent.putExtra("id", String.valueOf(noticeDB.insertRowNotice(
-                        mEditTextNoticeSubject.getText().toString(),
-                        mEditTextNotice.getText().toString())));
-        intent.putExtra("subject", mEditTextNoticeSubject.getText().toString());
-        intent.putExtra("notice", mEditTextNotice.getText().toString());
-
-        startActivity(intent);
-    }
-
-    public void onClickTag(View view) {
-        final Intent intent = new Intent(this, com.example.ise.mis.addTag.class);
-
-        intent.putExtra("id", noticeDB.insertRowNotice(
-                        mEditTextNoticeSubject.getText().toString(),
-                        mEditTextNotice.getText().toString()));
-
         startActivity(intent);
     }
 }
