@@ -5,8 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -83,8 +88,15 @@ public class MapsActivity extends FragmentActivity {
         Log.i(TAG, String.valueOf(c.getDouble(noticeDB.COL_LATITUDE)));
         Log.i(TAG, String.valueOf(c.getDouble(noticeDB.COL_LONGITUDE)));
         Log.i(TAG, "c.getCount " + c.getCount());
-        while (c.moveToNext()) {
-            //mMap.addMarker(new MarkerOptions().position(new LatLng(c.getDouble(noticeDB.COL_LATITUDE), c.getDouble(noticeDB.COL_LONGITUDE))).title("Marker"));
-        }
+
+        LatLng latLng = new LatLng(c.getDouble(noticeDB.COL_LATITUDE), c.getDouble(noticeDB.COL_LONGITUDE));
+        //while (c.moveToNext()) {
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+        //}
+        //LatLng latLng = new LatLng(50.7793,6.1642);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(10.0f).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.moveCamera(cameraUpdate);
+
     }
 }

@@ -1,21 +1,22 @@
 package com.example.ise.mis;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.ActionBarActivity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -36,6 +37,23 @@ public class MainActivity extends ActionBarActivity {
         populateListViewFromDB();
 
         onListViewNoticeClick();
+
+        String status = "";
+        if (isOnline()) {
+            status = "You are connected";
+        } else {
+            status = "You are not connected";
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("check connectivity")
+                .setMessage(status)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
@@ -116,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
         mListViewNotices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long idInDB) {
-                Log.w("--- onItemClick ---: ","DB id: " + String.valueOf(idInDB));
+                Log.w("--- onItemClick ---: ", "DB id: " + String.valueOf(idInDB));
                 intent.putExtra("id", String.valueOf(idInDB));
                 startActivity(intent);
             }
@@ -126,5 +144,12 @@ public class MainActivity extends ActionBarActivity {
     public void onClickCreateNotice(View view) {
         final Intent intent = new Intent(this, com.example.ise.mis.createNotice.class);
         startActivity(intent);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
