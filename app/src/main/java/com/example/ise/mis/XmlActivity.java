@@ -65,7 +65,7 @@ public class XmlActivity extends ActionBarActivity {
         // transform into XML-structure
         List<String> xml = new ArrayList<>();
 
-        if (noticesCursor == null) {
+        if (noticesCursor == null || noticesCursor.moveToFirst() == false) {
             return;
         }
 
@@ -84,7 +84,7 @@ public class XmlActivity extends ActionBarActivity {
 
             // get all tags for noticeId
             Cursor tagCursor = noticeDB.getAllNoticeIdRowsTag(noticeId);
-            if (tagCursor != null) {
+            if (tagCursor != null && tagCursor.moveToFirst() != false) {
                 do {
                     xml.add("<tag>");
                     xml.add(tagCursor.getString(tagCursor.getColumnIndex("tag")));
@@ -99,7 +99,7 @@ public class XmlActivity extends ActionBarActivity {
 
             // get all locations for noticeId
             Cursor locationCursor = noticeDB.getAllNoticeIdRowsLocation(noticeId);
-            if (locationCursor != null) {
+            if (locationCursor != null && locationCursor.moveToFirst() != false) {
                 do {
                     xml.add("<latitude>");
                     xml.add(Double.toString(locationCursor.getDouble(locationCursor.getColumnIndex("latitude"))));
