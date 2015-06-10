@@ -15,14 +15,26 @@
         android:layout_height="match_parent"
         android:weightSum="1">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Notice"
-            android:id="@+id/button_addNotice"
-            android:layout_gravity="left"
-            android:onClick="onClickCreateNotice"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120px">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Notice"
+                android:id="@+id/button_addNotice"
+                android:layout_gravity="left"
+                android:onClick="onClickCreateNotice"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_export"
+                android:id="@+id/button_main_xml"
+                android:onClick="onClickXml" />
+        </LinearLayout>
 
         <ListView
             android:layout_width="match_parent"

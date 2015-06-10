@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -22,7 +21,6 @@ public class MainActivity extends ActionBarActivity {
 
     DBAdapter noticeDB;
 
-    private Button mButtonCreateNotice;
     private ListView mListViewNotices;
 
     @Override
@@ -30,7 +28,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mButtonCreateNotice = (Button)findViewById(R.id.button_addNotice);
         mListViewNotices = (ListView)findViewById(R.id.listView_notices);
 
         openDB();
@@ -134,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
         mListViewNotices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long idInDB) {
-                Log.w("--- onItemClick ---: ", "DB id: " + String.valueOf(idInDB));
+                Log.w("--- onItemClick ---: ","DB id: " + String.valueOf(idInDB));
                 intent.putExtra("id", String.valueOf(idInDB));
                 startActivity(intent);
             }
@@ -143,6 +140,11 @@ public class MainActivity extends ActionBarActivity {
 
     public void onClickCreateNotice(View view) {
         final Intent intent = new Intent(this, com.example.ise.mis.createNotice.class);
+        startActivity(intent);
+    }
+
+    public void onClickXml(View view) {
+        final Intent intent = new Intent(this, XmlActivity.class);
         startActivity(intent);
     }
 

@@ -1,7 +1,6 @@
 package com.example.ise.mis;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -42,7 +40,6 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
     private double longitude = -5.35325220;
     private double latitude = 36.14491060;
     public static final String TAG = createNotice.class.getSimpleName();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +171,7 @@ public class createNotice extends ActionBarActivity implements GoogleApiClient.C
                 mEditTextNotice.getText().toString());
         noticeDB.insertRowLocation(noticeID, latitude, longitude);
         intent.putExtra("noticeID", String.valueOf(noticeID));
-        Log.i(TAG,"NOTICEID: " + noticeID);
+        Log.i(TAG, "NOTICEID: " + noticeID);
         startActivity(intent);
     }
 }
